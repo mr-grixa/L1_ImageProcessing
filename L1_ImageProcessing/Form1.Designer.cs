@@ -38,8 +38,12 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.button_start = new System.Windows.Forms.Button();
+            this.numericUpDownKlaster = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownSize = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownKlaster)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSize)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBoxMain
@@ -108,11 +112,43 @@
             this.button_start.UseVisualStyleBackColor = true;
             this.button_start.Click += new System.EventHandler(this.button_start_Click);
             // 
+            // numericUpDownKlaster
+            // 
+            this.numericUpDownKlaster.Location = new System.Drawing.Point(229, 12);
+            this.numericUpDownKlaster.Name = "numericUpDownKlaster";
+            this.numericUpDownKlaster.Size = new System.Drawing.Size(102, 20);
+            this.numericUpDownKlaster.TabIndex = 75;
+            this.numericUpDownKlaster.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            // 
+            // numericUpDownSize
+            // 
+            this.numericUpDownSize.DecimalPlaces = 2;
+            this.numericUpDownSize.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numericUpDownSize.Location = new System.Drawing.Point(229, 68);
+            this.numericUpDownSize.Name = "numericUpDownSize";
+            this.numericUpDownSize.Size = new System.Drawing.Size(102, 20);
+            this.numericUpDownSize.TabIndex = 76;
+            this.numericUpDownSize.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.numericUpDownSize);
+            this.Controls.Add(this.numericUpDownKlaster);
             this.Controls.Add(this.button_start);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.textBox_path);
@@ -124,6 +160,8 @@
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMain)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownKlaster)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSize)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -140,6 +178,8 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Timer timer2;
         private System.Windows.Forms.Button button_start;
+        private System.Windows.Forms.NumericUpDown numericUpDownKlaster;
+        private System.Windows.Forms.NumericUpDown numericUpDownSize;
     }
 }
 
