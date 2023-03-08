@@ -141,6 +141,7 @@
             0,
             0,
             65536});
+            this.numericUpDownSize.ValueChanged += new System.EventHandler(this.numericUpDownSize_ValueChanged);
             // 
             // Form1
             // 

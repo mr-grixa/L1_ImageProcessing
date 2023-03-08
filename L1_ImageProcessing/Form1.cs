@@ -86,7 +86,7 @@ namespace L1_ImageProcessing
                     double Y  = point.Y * size + 200;
                     if (X < 400 && X > 0 && Y < 400 && Y > 0)
                     {
-                        bitmap.SetPixel((int)(X), (int)(Y), Color.Blue);
+                        bitmap.SetPixel((int)(X), (int)(Y), color);
                     }
                 }
             }
@@ -200,5 +200,9 @@ namespace L1_ImageProcessing
             return nearestCentroidIndex;
         }
 
+        private void numericUpDownSize_ValueChanged(object sender, EventArgs e)
+        {
+            Draw();
+        }
     }
 }
