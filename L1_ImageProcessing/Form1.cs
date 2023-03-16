@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Reflection;
+using System.Numerics;
 
 namespace L1_ImageProcessing
 {
@@ -41,11 +43,11 @@ namespace L1_ImageProcessing
             
         }
         int [] data;
-        private void button2_Click(object sender, EventArgs e)
+        private void button_next_Click(object sender, EventArgs e)
         {
             GenerateXY();
         }
-        List<List<PointF>> klasters;
+        Cluster[] clusters;
         private void GenerateXY()
         {
             string[] valuses = streamReader.ReadLine().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
@@ -67,7 +69,18 @@ namespace L1_ImageProcessing
                 points.Add(new PointF((float)X, (float)Y));
 
             }
-            klasters = KMeans(points, (int)numericUpDownKlaster.Value);
+            if (clusters != null)
+            {
+                Cluster[] clustersOld = clusters;
+                clusters = KMeans(points, (int)numericUpDownKlaster.Value);
+                Search(clustersOld);
+            }
+            else
+            {
+                clusters = KMeans(points, (int)numericUpDownKlaster.Value);
+            }
+            
+
             Draw();
 
             
@@ -77,16 +90,50 @@ namespace L1_ImageProcessing
             Bitmap bitmap = new Bitmap(400, 400);
             Random random = new Random();
             double size = (double)numericUpDownSize.Value;
-            foreach (List<PointF> klaster in klasters)
+
+            StringFormat sf = new StringFormat();
+            sf.LineAlignment = StringAlignment.Center;
+            sf.Alignment = StringAlignment.Center;
+
+            foreach (Cluster cluster in clusters)
             {
-                Color color = Color.FromArgb(random.Next(256), random.Next(256), random.Next(256));
-                foreach(PointF point in klaster)
+                if (cluster.Points.Count != 0)
                 {
-                    double X = point.X * size + 200;
-                    double Y  = point.Y * size + 200;
-                    if (X < 400 && X > 0 && Y < 400 && Y > 0)
+
+                    Color color = Color.FromArgb(random.Next(256), random.Next(256), random.Next(256));
+                    double Xsum = 0;
+                    double Ysum = 0;
+                    double XXsum=0;
+                    double XYsum = 0;
+                    foreach (PointF point in cluster.Points)
                     {
-                        bitmap.SetPixel((int)(X), (int)(Y), color);
+                        double X = point.X * size + 200;
+                        double Y = point.Y * size + 200;
+                        if (X < 400 && X > 0 && Y < 400 && Y > 0)
+                        {
+                            bitmap.SetPixel((int)(X), (int)(Y), color);
+                        }
+                        Xsum += point.X;
+                        Ysum += point.Y;
+                        XXsum= point.X * point.X;
+                        XYsum += point.X * point.Y;
+                    }
+
+                    using (Graphics graphics = Graphics.FromImage(bitmap))
+                    {
+                        graphics.DrawString(cluster.Id.ToString(), this.Font,
+                            new SolidBrush(color), (int)(cluster.Center.X * size + 200), (int)(cluster.Center.Y * size + 200), sf);
+                        double N = cluster.Points.Count();
+                        double k = ((N * XYsum)-(Xsum * Ysum))
+                                / ((N * XXsum)-(Xsum * Xsum));
+                        double b = (Ysum -( k* Xsum))/N;
+                        try
+                        {
+                            graphics.DrawLine(Pens.Red, (int)(cluster.Center.X * size + 200), (int)((cluster.Center.X * k + b) * size + 200)
+                                ,(int)((cluster.Center.X + 100) * size + 200), (int)(((cluster.Center.X + 100) * k + b) * size + 200));
+                   
+                        }
+                        catch { }
                     }
                 }
             }
@@ -112,10 +159,53 @@ namespace L1_ImageProcessing
             }
         }
 
-        public static List<List<PointF>> KMeans(List<PointF> points, int k)
+        private void Search(Cluster[] clustersOld)
+        {
+            double mindistant = (double)numericUpDown_R.Value;
+            foreach (Cluster cluster1 in clusters)
+            {
+                Cluster cluster=null;
+                double distant = mindistant;
+                foreach (Cluster cluster2 in clustersOld)
+                {
+                    double dx =cluster1.Center.X - cluster2.Center.X;
+                    double dy =cluster1.Center.Y - cluster2.Center.Y;
+                    double _distant = Math.Sqrt(dy * dy + dx * dx);
+                    if (distant > _distant)
+                    {
+                        distant = _distant;
+                        cluster=cluster2;
+                    }
+                }
+                if (cluster != null)
+                {
+                    cluster1.Id = cluster.Id;
+                }
+                else
+                {
+                    cluster1.Id = 0;
+                }
+            }
+        }
+
+        public class Cluster
+        {
+            public int Id;// Идентификатор кластера
+            public List<PointF> Points; // Список точек кластера
+            public PointF Center; // Центр кластера
+
+            public Cluster(int id, List<PointF> points, PointF center)
+            {
+                Id = id;
+                Points = points;
+                Center = center;
+            }
+        }
+
+        public static Cluster[] KMeans(List<PointF> points, int k)
         {
             List<List<PointF>> clusters = new List<List<PointF>>();
-
+            
             // Step 1: Initialize k clusters randomly
             List<PointF> centroids = InitializeClusters(points, k);
 
@@ -168,8 +258,12 @@ namespace L1_ImageProcessing
 
                 centroids = newCentroids;
             }
-
-            return clusters;
+            Cluster[] cluster = new Cluster[k];
+            for (int i=0; i < clusters.Count; i++)
+            {
+                cluster[i] =new Cluster(i, clusters[i], centroids[i]);
+            }
+            return cluster;
         }
 
         private static List<PointF> InitializeClusters(List<PointF> points, int k)

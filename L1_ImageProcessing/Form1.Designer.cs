@@ -40,10 +40,15 @@
             this.button_start = new System.Windows.Forms.Button();
             this.numericUpDownKlaster = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownSize = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.numericUpDown_R = new System.Windows.Forms.NumericUpDown();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownKlaster)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSize)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_R)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBoxMain
@@ -71,7 +76,7 @@
             this.button_next.TabIndex = 5;
             this.button_next.Text = "Next";
             this.button_next.UseVisualStyleBackColor = true;
-            this.button_next.Click += new System.EventHandler(this.button2_Click);
+            this.button_next.Click += new System.EventHandler(this.button_next_Click);
             // 
             // button_load
             // 
@@ -114,7 +119,7 @@
             // 
             // numericUpDownKlaster
             // 
-            this.numericUpDownKlaster.Location = new System.Drawing.Point(229, 12);
+            this.numericUpDownKlaster.Location = new System.Drawing.Point(280, 12);
             this.numericUpDownKlaster.Name = "numericUpDownKlaster";
             this.numericUpDownKlaster.Size = new System.Drawing.Size(102, 20);
             this.numericUpDownKlaster.TabIndex = 75;
@@ -132,7 +137,7 @@
             0,
             0,
             65536});
-            this.numericUpDownSize.Location = new System.Drawing.Point(229, 68);
+            this.numericUpDownSize.Location = new System.Drawing.Point(280, 38);
             this.numericUpDownSize.Name = "numericUpDownSize";
             this.numericUpDownSize.Size = new System.Drawing.Size(102, 20);
             this.numericUpDownSize.TabIndex = 76;
@@ -143,11 +148,65 @@
             65536});
             this.numericUpDownSize.ValueChanged += new System.EventHandler(this.numericUpDownSize_ValueChanged);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(217, 14);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(57, 13);
+            this.label1.TabIndex = 77;
+            this.label1.Text = "Кластеры";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(218, 40);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(56, 13);
+            this.label2.TabIndex = 78;
+            this.label2.Text = "Масштаб ";
+            // 
+            // numericUpDown_R
+            // 
+            this.numericUpDown_R.DecimalPlaces = 2;
+            this.numericUpDown_R.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numericUpDown_R.Location = new System.Drawing.Point(280, 100);
+            this.numericUpDown_R.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.numericUpDown_R.Name = "numericUpDown_R";
+            this.numericUpDown_R.Size = new System.Drawing.Size(102, 20);
+            this.numericUpDown_R.TabIndex = 79;
+            this.numericUpDown_R.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(220, 102);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(43, 13);
+            this.label3.TabIndex = 80;
+            this.label3.Text = "Радиус";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.numericUpDown_R);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.numericUpDownSize);
             this.Controls.Add(this.numericUpDownKlaster);
             this.Controls.Add(this.button_start);
@@ -163,6 +222,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownKlaster)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSize)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_R)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -181,6 +241,10 @@
         private System.Windows.Forms.Button button_start;
         private System.Windows.Forms.NumericUpDown numericUpDownKlaster;
         private System.Windows.Forms.NumericUpDown numericUpDownSize;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.NumericUpDown numericUpDown_R;
+        private System.Windows.Forms.Label label3;
     }
 }
 
