@@ -44,6 +44,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.numericUpDown_R = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
+            this.textBox_IP = new System.Windows.Forms.TextBox();
+            this.textBox_Port = new System.Windows.Forms.TextBox();
+            this.button_IP_lidar = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownKlaster)).BeginInit();
@@ -94,6 +98,7 @@
             this.textBox_path.Name = "textBox_path";
             this.textBox_path.Size = new System.Drawing.Size(269, 20);
             this.textBox_path.TabIndex = 71;
+            this.textBox_path.Text = "C:\\Users\\user\\Downloads\\HokuyoLidar_lidarlog\\HokuyoLidar_lidarlog.txt";
             // 
             // listBox1
             // 
@@ -106,6 +111,10 @@
             // timer1
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // timer2
+            // 
+            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
             // button_start
             // 
@@ -198,11 +207,51 @@
             this.label3.TabIndex = 80;
             this.label3.Text = "Радиус";
             // 
+            // textBox_IP
+            // 
+            this.textBox_IP.Location = new System.Drawing.Point(223, 143);
+            this.textBox_IP.Name = "textBox_IP";
+            this.textBox_IP.Size = new System.Drawing.Size(69, 20);
+            this.textBox_IP.TabIndex = 81;
+            this.textBox_IP.Text = "127.0.0.1";
+            // 
+            // textBox_Port
+            // 
+            this.textBox_Port.Location = new System.Drawing.Point(313, 143);
+            this.textBox_Port.Name = "textBox_Port";
+            this.textBox_Port.Size = new System.Drawing.Size(69, 20);
+            this.textBox_Port.TabIndex = 82;
+            this.textBox_Port.Text = "2368";
+            // 
+            // button_IP_lidar
+            // 
+            this.button_IP_lidar.Location = new System.Drawing.Point(223, 169);
+            this.button_IP_lidar.Name = "button_IP_lidar";
+            this.button_IP_lidar.Size = new System.Drawing.Size(159, 54);
+            this.button_IP_lidar.TabIndex = 83;
+            this.button_IP_lidar.Text = "Подключится";
+            this.button_IP_lidar.UseVisualStyleBackColor = true;
+            this.button_IP_lidar.Click += new System.EventHandler(this.button_IP_lidar_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(223, 253);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(159, 54);
+            this.button1.TabIndex = 85;
+            this.button1.Text = "Подключится";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.button_IP_lidar);
+            this.Controls.Add(this.textBox_Port);
+            this.Controls.Add(this.textBox_IP);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.numericUpDown_R);
             this.Controls.Add(this.label2);
@@ -218,6 +267,7 @@
             this.Controls.Add(this.pictureBoxMain);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMain)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownKlaster)).EndInit();
@@ -245,6 +295,10 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown numericUpDown_R;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox textBox_IP;
+        private System.Windows.Forms.TextBox textBox_Port;
+        private System.Windows.Forms.Button button_IP_lidar;
+        private System.Windows.Forms.Button button1;
     }
 }
 

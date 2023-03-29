@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.IO;
-using System.Text.RegularExpressions;
+using System.Net;
+using System.Net.Sockets;
 using System.Reflection;
-using System.Numerics;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
+using static L1_ImageProcessing.Form1;
 
 namespace L1_ImageProcessing
 {
@@ -34,58 +32,83 @@ namespace L1_ImageProcessing
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 streamReader = new StreamReader(openFileDialog.FileName);
-                
+                textBox_path.Text = openFileDialog.FileName;
             }
         }
-        
+
         public void Load()
         {
-            
+
         }
-        int [] data;
+        int[] data;
         private void button_next_Click(object sender, EventArgs e)
         {
             GenerateXY();
         }
-        Cluster[] clusters;
+        
         private void GenerateXY()
         {
-            string[] valuses = streamReader.ReadLine().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-            data = new int[valuses.Length - 1];
-            for (int i = 1; i < valuses.Length; i++)
+            if (streamReader == null) { streamReader = new StreamReader(textBox_path.Text); }
+            if (!streamReader.EndOfStream)
             {
-                data[i - 1] = int.Parse(valuses[i]);
-            }
-            listBox1.Items.Clear();
-            listBox1.Items.AddRange(valuses);
+                string[] valuses = streamReader.ReadLine()
+                    .Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
-            double F = 0;
-            List<PointF> points = new List<PointF>();
-            foreach (int i in data)
-            {
-                F += Math.PI / 512;
-                double X = Math.Cos(F) * i;
-                double Y = Math.Sin(F) * i;
-                points.Add(new PointF((float)X, (float)Y));
+                data = new int[valuses.Length - 1];
+                for (int i = 1; i < valuses.Length; i++)
+                {
+                    data[i - 1] = int.Parse(valuses[i]);
+                }
+                listBox1.Items.Clear();
+                listBox1.Items.AddRange(valuses);
 
-            }
-            if (clusters != null)
-            {
-                Cluster[] clustersOld = clusters;
-                clusters = KMeans(points, (int)numericUpDownKlaster.Value);
-                Search(clustersOld);
-            }
-            else
-            {
-                clusters = KMeans(points, (int)numericUpDownKlaster.Value);
-            }
-            
+                double F = 0;
+                List<PointF> points = new List<PointF>();
+                foreach (int i in data)
+                {
+                    F += Math.PI / 512;
+                    double X = Math.Cos(F) * i;
+                    double Y = Math.Sin(F) * i;
+                    points.Add(new PointF((float)X, (float)Y));
 
-            Draw();
+                }
+                //Cluster[] clusters;
+                //if (clusters != null)
+                //{
+                //    Cluster[] clustersOld = clusters;
+                //    clusters = KMeans(points, (int)numericUpDownKlaster.Value);
+                //    Search(clustersOld);
+                //}
+                //else
+                //{
+                Cluster[] clusters = KMeans(points, (int)numericUpDownKlaster.Value);
+                
 
-            
+
+                DrawClusters(clusters);
+            }
+
         }
-        public void Draw()
+        public void Draw(List<PointF> points)
+        {
+            Bitmap bitmap = new Bitmap(400, 400);
+            Random random = new Random();
+            double size = (double)numericUpDownSize.Value;
+
+            foreach (PointF point in points)
+            {
+                double X = point.X * size + 200;
+                double Y = point.Y * size + 200;
+                if (X < 400 && X > 0 && Y < 400 && Y > 0)
+                {
+                    bitmap.SetPixel((int)(X), (int)(Y), Color.White);
+                }
+            }
+
+            pictureBoxMain.Image = bitmap;
+        }
+
+        public void DrawClusters(Cluster[] clusters)
         {
             Bitmap bitmap = new Bitmap(400, 400);
             Random random = new Random();
@@ -103,7 +126,7 @@ namespace L1_ImageProcessing
                     Color color = Color.FromArgb(random.Next(256), random.Next(256), random.Next(256));
                     double Xsum = 0;
                     double Ysum = 0;
-                    double XXsum=0;
+                    double XXsum = 0;
                     double XYsum = 0;
                     foreach (PointF point in cluster.Points)
                     {
@@ -115,7 +138,7 @@ namespace L1_ImageProcessing
                         }
                         Xsum += point.X;
                         Ysum += point.Y;
-                        XXsum= point.X * point.X;
+                        XXsum = point.X * point.X;
                         XYsum += point.X * point.Y;
                     }
 
@@ -124,14 +147,14 @@ namespace L1_ImageProcessing
                         graphics.DrawString(cluster.Id.ToString(), this.Font,
                             new SolidBrush(color), (int)(cluster.Center.X * size + 200), (int)(cluster.Center.Y * size + 200), sf);
                         double N = cluster.Points.Count();
-                        double k = ((N * XYsum)-(Xsum * Ysum))
-                                / ((N * XXsum)-(Xsum * Xsum));
-                        double b = (Ysum -( k* Xsum))/N;
+                        double k = ((N * XYsum) - (Xsum * Ysum))
+                                / ((N * XXsum) - (Xsum * Xsum));
+                        double b = (Ysum - (k * Xsum)) / N;
                         try
                         {
                             graphics.DrawLine(Pens.Red, (int)(cluster.Center.X * size + 200), (int)((cluster.Center.X * k + b) * size + 200)
-                                ,(int)((cluster.Center.X + 100) * size + 200), (int)(((cluster.Center.X + 100) * k + b) * size + 200));
-                   
+                                , (int)((cluster.Center.X + 100) * size + 200), (int)(((cluster.Center.X + 100) * k + b) * size + 200));
+
                         }
                         catch { }
                     }
@@ -159,34 +182,34 @@ namespace L1_ImageProcessing
             }
         }
 
-        private void Search(Cluster[] clustersOld)
-        {
-            double mindistant = (double)numericUpDown_R.Value;
-            foreach (Cluster cluster1 in clusters)
-            {
-                Cluster cluster=null;
-                double distant = mindistant;
-                foreach (Cluster cluster2 in clustersOld)
-                {
-                    double dx =cluster1.Center.X - cluster2.Center.X;
-                    double dy =cluster1.Center.Y - cluster2.Center.Y;
-                    double _distant = Math.Sqrt(dy * dy + dx * dx);
-                    if (distant > _distant)
-                    {
-                        distant = _distant;
-                        cluster=cluster2;
-                    }
-                }
-                if (cluster != null)
-                {
-                    cluster1.Id = cluster.Id;
-                }
-                else
-                {
-                    cluster1.Id = 0;
-                }
-            }
-        }
+        //private void Search(Cluster[] clustersOld)
+        //{
+        //    double mindistant = (double)numericUpDown_R.Value;
+        //    foreach (Cluster cluster1 in clusters)
+        //    {
+        //        Cluster cluster = null;
+        //        double distant = mindistant;
+        //        foreach (Cluster cluster2 in clustersOld)
+        //        {
+        //            double dx = cluster1.Center.X - cluster2.Center.X;
+        //            double dy = cluster1.Center.Y - cluster2.Center.Y;
+        //            double _distant = Math.Sqrt(dy * dy + dx * dx);
+        //            if (distant > _distant)
+        //            {
+        //                distant = _distant;
+        //                cluster = cluster2;
+        //            }
+        //        }
+        //        if (cluster != null)
+        //        {
+        //            cluster1.Id = cluster.Id;
+        //        }
+        //        else
+        //        {
+        //            cluster1.Id = 0;
+        //        }
+        //    }
+        //}
 
         public class Cluster
         {
@@ -202,10 +225,10 @@ namespace L1_ImageProcessing
             }
         }
 
-        public static Cluster[] KMeans(List<PointF> points, int k)
+        public Cluster[] KMeans(List<PointF> points, int k)
         {
             List<List<PointF>> clusters = new List<List<PointF>>();
-            
+
             // Step 1: Initialize k clusters randomly
             List<PointF> centroids = InitializeClusters(points, k);
 
@@ -259,9 +282,9 @@ namespace L1_ImageProcessing
                 centroids = newCentroids;
             }
             Cluster[] cluster = new Cluster[k];
-            for (int i=0; i < clusters.Count; i++)
+            for (int i = 0; i < clusters.Count; i++)
             {
-                cluster[i] =new Cluster(i, clusters[i], centroids[i]);
+                cluster[i] = new Cluster(i, clusters[i], centroids[i]);
             }
             return cluster;
         }
@@ -278,7 +301,7 @@ namespace L1_ImageProcessing
             return centroids;
         }
 
-        private static int GetNearestCentroidIndex(PointF point, List<PointF> centroids)
+        private int GetNearestCentroidIndex(PointF point, List<PointF> centroids)
         {
             double minDistance = double.MaxValue;
             int nearestCentroidIndex = 0;
@@ -296,7 +319,115 @@ namespace L1_ImageProcessing
 
         private void numericUpDownSize_ValueChanged(object sender, EventArgs e)
         {
-            Draw();
+           // DrawClusters();
+        }
+
+
+        public delegate void AddItemDelegate(byte[] bytes);
+        public void AddItem(byte[] bytesT)
+        {
+            string sByte = "";
+            foreach (byte b in bytesT)
+            {
+                sByte += b.ToString() + " ";
+            }
+            bytes = bytesT;
+            //richTextBox1.Text = sByte;
+            listBox1.Items.Add(sByte);
+        }
+
+        private void button_IP_lidar_Click(object sender, EventArgs e)
+        {
+
+            if (t == null)
+            {
+                t = new Thread(new ThreadStart(StartListener));
+                t.Start();
+                button_IP_lidar.Text = "Отключится";
+
+            }
+            else
+            {
+                if (t.ThreadState == ThreadState.Running)
+                {
+                    button_IP_lidar.Text = "Подключится";
+                    t.Suspend();
+                }
+                else
+                {
+                    button_IP_lidar.Text = "Отключится";
+                    t.Resume();
+                }
+            }
+
+        }
+        Thread t;
+        byte[] bytes;
+
+        private void StartListener()
+        {
+            int listenPort = int.Parse(textBox_Port.Text);
+            UdpClient listener = new UdpClient(listenPort);
+            IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, listenPort);
+
+            try
+            {
+                while (true)
+                {
+
+                    //listBox1.Items.Add("Waiting for broadcast");
+                    byte[] bytes = listener.Receive(ref groupEP);
+
+                    //listBox1.Items.Add($"Received broadcast from {groupEP} :");
+                    //listBox1.Items.Add($" {Encoding.ASCII.GetString(bytes, 0, bytes.Length)}");
+
+                    listBox1.Invoke(new AddItemDelegate(AddItem), new object[] { bytes });
+                }
+            }
+            catch (SocketException e)
+            {
+                //listBox1.Invoke(new AddItemDelegate(AddItem), new object[] { e });
+            }
+            finally
+            {
+                listener.Close();
+            }
+
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (t!=null)
+            {
+            if (t.ThreadState == ThreadState.Suspended)
+            {
+                t.Resume();            
+            }
+            t.Abort();
+            }
+
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            List<PointF> points = new List<PointF>();
+            double F = 0;
+            foreach (byte i in bytes)
+            {
+
+                F += Math.PI / 722*2;
+                double X = Math.Cos(F) * i;
+                double Y = Math.Sin(F) * i;
+                points.Add(new PointF((float)X, (float)Y));
+
+            }
+            Cluster[] clusters = KMeans(points, (int)numericUpDownKlaster.Value);
+            Draw(points);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            timer2.Start();
         }
     }
 }
