@@ -412,10 +412,15 @@ namespace L1_ImageProcessing
         {
             List<PointF> points = new List<PointF>();
             double F = 0;
-            foreach (byte i in bytes)
+            int[] data = new int [bytes.Length/2];
+            for (int i = 0; i < bytes.Length/2; i++)
+            {
+                data[i] = bytes[2*i] * 255 + bytes[2*i + 1];
+            }
+            foreach (int i in data)
             {
 
-                F += Math.PI / 722*2;
+                F += Math.PI / 722*4;
                 double X = Math.Cos(F) * i;
                 double Y = Math.Sin(F) * i;
                 points.Add(new PointF((float)X, (float)Y));
