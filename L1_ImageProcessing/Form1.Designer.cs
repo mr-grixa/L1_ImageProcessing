@@ -47,7 +47,7 @@
             this.textBox_IP = new System.Windows.Forms.TextBox();
             this.textBox_Port = new System.Windows.Forms.TextBox();
             this.button_IP_lidar = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.checkBox_claster = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownKlaster)).BeginInit();
@@ -145,7 +145,7 @@
             1,
             0,
             0,
-            65536});
+            131072});
             this.numericUpDownSize.Location = new System.Drawing.Point(280, 38);
             this.numericUpDownSize.Name = "numericUpDownSize";
             this.numericUpDownSize.Size = new System.Drawing.Size(102, 20);
@@ -179,10 +179,10 @@
             // 
             this.numericUpDown_R.DecimalPlaces = 2;
             this.numericUpDown_R.Increment = new decimal(new int[] {
-            1,
+            10,
             0,
             0,
-            65536});
+            0});
             this.numericUpDown_R.Location = new System.Drawing.Point(280, 100);
             this.numericUpDown_R.Maximum = new decimal(new int[] {
             100000,
@@ -193,10 +193,10 @@
             this.numericUpDown_R.Size = new System.Drawing.Size(102, 20);
             this.numericUpDown_R.TabIndex = 79;
             this.numericUpDown_R.Value = new decimal(new int[] {
-            1,
+            300,
             0,
             0,
-            65536});
+            0});
             // 
             // label3
             // 
@@ -233,22 +233,24 @@
             this.button_IP_lidar.UseVisualStyleBackColor = true;
             this.button_IP_lidar.Click += new System.EventHandler(this.button_IP_lidar_Click);
             // 
-            // button1
+            // checkBox_claster
             // 
-            this.button1.Location = new System.Drawing.Point(223, 253);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(159, 54);
-            this.button1.TabIndex = 85;
-            this.button1.Text = "Подключится";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.checkBox_claster.AutoSize = true;
+            this.checkBox_claster.Checked = true;
+            this.checkBox_claster.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_claster.Location = new System.Drawing.Point(13, 370);
+            this.checkBox_claster.Name = "checkBox_claster";
+            this.checkBox_claster.Size = new System.Drawing.Size(76, 17);
+            this.checkBox_claster.TabIndex = 86;
+            this.checkBox_claster.Text = "Кластеры";
+            this.checkBox_claster.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.checkBox_claster);
             this.Controls.Add(this.button_IP_lidar);
             this.Controls.Add(this.textBox_Port);
             this.Controls.Add(this.textBox_IP);
@@ -298,7 +300,7 @@
         private System.Windows.Forms.TextBox textBox_IP;
         private System.Windows.Forms.TextBox textBox_Port;
         private System.Windows.Forms.Button button_IP_lidar;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.CheckBox checkBox_claster;
     }
 }
 
