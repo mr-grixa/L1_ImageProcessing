@@ -137,6 +137,7 @@ namespace L1_ImageProcessing
             sf.LineAlignment = StringAlignment.Center;
             sf.Alignment = StringAlignment.Center;
 
+            //listBox1.Items.Clear();
             foreach (Cluster cluster in clusters)
             {
                 if (cluster.Points.Count != 0)
@@ -172,13 +173,15 @@ namespace L1_ImageProcessing
                         double n = cluster.Points.Count();
 
                         double k = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
-                        double b = (sumY - k * sumX) / n;
+                        double b = (sumY - cluster.k * sumX) / n;
+                        cluster.b = b;
+                        cluster.k = k;
 
-                        double centerX = (int)cluster.Center.X;
-                        double centerY = (int)cluster.Center.Y;
+                        double centerX = cluster.Center.X;
+                        double centerY = cluster.Center.Y;
                         double radius = (double)numericUpDown_R.Value;
                         double x1 = cluster.Center.X - radius;
-                        double y1 = k * x1 + b;
+                        double y1 = k * x1 + cluster.b;
                         double x2 = cluster.Center.X + radius;
                         double y2 = k * x2 + b;
 
@@ -225,13 +228,17 @@ namespace L1_ImageProcessing
                             y2 = k * (centerX + radius) + b;
                             x2 = centerX + radius;
                         }
+
                         try
                         {
+                            //listBox1.Items.Add(Math.Round(cluster.k,2) + " " + Math.Round(cluster.b, 2) + " " + cluster.Id);
                             graphics.DrawEllipse(Pens.Black,
                                 (int)((cluster.Center.X - radius) * size + 200),
                                 (int)((cluster.Center.Y - radius) * size + 200),
                                 (int)(radius * 2 * size),
                                 (int)(radius * 2 * size));
+
+
                             graphics.DrawLine(Pens.Red, (int)(x1 * size + 200),
                                                         (int)(y1 * size + 200),
                                                         (int)(x2 * size + 200),
@@ -297,6 +304,8 @@ namespace L1_ImageProcessing
             public int Id;// Идентификатор кластера
             public List<PointF> Points; // Список точек кластера
             public PointF Center; // Центр кластера
+            public double k; // Прямая
+            public double b; 
 
             public Cluster(int id, List<PointF> points, PointF center)
             {
