@@ -130,7 +130,7 @@ namespace L1_ImageProcessing
         public void DrawClusters(Cluster[] clusters)
         {
             Bitmap bitmap = new Bitmap(400, 400);
-            Random random = new Random();
+            Random random = new Random(10);
             double size = (double)numericUpDownSize.Value;
 
             StringFormat sf = new StringFormat();
@@ -139,13 +139,19 @@ namespace L1_ImageProcessing
 
             CalculateClusterLine(clusters);
             SearchWall(clusters);
+            Color [] colors = new Color [clusters.Length]; 
+            for (int i = 0; i < colors.Length; i++)
+            {
+                colors[i] = Color.FromArgb(random.Next(256), random.Next(256), random.Next(256));
+            }
+
 
             foreach (Cluster cluster in clusters)
             {
                 if (cluster.Points.Count != 0)
                 {
 
-                    Color color = Color.FromArgb(random.Next(256), random.Next(256), random.Next(256));
+                    
 
                     foreach (PointF point in cluster.Points)
                     {
@@ -153,71 +159,73 @@ namespace L1_ImageProcessing
                         double Y = point.Y * size + 200;
                         if (X < 400 && X > 0 && Y < 400 && Y > 0)
                         {
-                            bitmap.SetPixel((int)(X), (int)(Y), color);
+                            bitmap.SetPixel((int)(X), (int)(Y), colors[cluster.Id]);
                         }
                     }
 
                     using (Graphics graphics = Graphics.FromImage(bitmap))
                     {
-                       
+                        graphics.DrawString(cluster.Id.ToString(), this.Font,
+                             new SolidBrush(colors[cluster.wallId]), (int)(cluster.Center.X * size + 200), (int)(cluster.Center.Y * size + 200), sf);
 
-                        double centerX = cluster.Center.X;
-                        double centerY = cluster.Center.Y;
-                        double radius = (double)numericUpDown_R.Value;
-                        double x1 = cluster.Center.X - radius;
-                        double y1 = cluster.k * x1 + cluster.b;
-                        double x2 = cluster.Center.X + radius;
-                        double y2 = cluster.k * x2 + cluster.b;
+                        if (checkBox_DrawRadius.Checked)
+                        {
+                            double centerX = cluster.Center.X;
+                            double centerY = cluster.Center.Y;
+                            double radius = (double)numericUpDown_R.Value;
+                            double x1 = cluster.Center.X - radius;
+                            double y1 = cluster.k * x1 + cluster.b;
+                            double x2 = cluster.Center.X + radius;
+                            double y2 = cluster.k * x2 + cluster.b;
 
-                        if (y1 < centerY - radius)
-                        {
-                            x1 = (centerY - radius - cluster.b) / cluster.k;
-                            y1 = centerY - radius;
-                        }
-                        else if (y1 > centerY + radius)
-                        {
-                            x1 = (centerY + radius - cluster.b) / cluster.k;
-                            y1 = centerY + radius;
-                        }
+                            if (y1 < centerY - radius)
+                            {
+                                x1 = (centerY - radius - cluster.b) / cluster.k;
+                                y1 = centerY - radius;
+                            }
+                            else if (y1 > centerY + radius)
+                            {
+                                x1 = (centerY + radius - cluster.b) / cluster.k;
+                                y1 = centerY + radius;
+                            }
 
-                        if (y2 < centerY - radius)
-                        {
-                            x2 = (centerY - radius - cluster.b) / cluster.k;
-                            y2 = centerY - radius;
-                        }
-                        else if (y2 > centerY + radius)
-                        {
-                            x2 = (centerY + radius - cluster.b) / cluster.k;
-                            y2 = centerY + radius;
-                        }
+                            if (y2 < centerY - radius)
+                            {
+                                x2 = (centerY - radius - cluster.b) / cluster.k;
+                                y2 = centerY - radius;
+                            }
+                            else if (y2 > centerY + radius)
+                            {
+                                x2 = (centerY + radius - cluster.b) / cluster.k;
+                                y2 = centerY + radius;
+                            }
 
-                        if (x1 < centerX - radius)
-                        {
-                            y1 = cluster.k * (centerX - radius) + cluster.b;
-                            x1 = centerX - radius;
-                        }
-                        else if (x1 > centerX + radius)
-                        {
-                            y1 = cluster.k * (centerX + radius) + cluster.b;
-                            x1 = centerX + radius;
-                        }
+                            if (x1 < centerX - radius)
+                            {
+                                y1 = cluster.k * (centerX - radius) + cluster.b;
+                                x1 = centerX - radius;
+                            }
+                            else if (x1 > centerX + radius)
+                            {
+                                y1 = cluster.k * (centerX + radius) + cluster.b;
+                                x1 = centerX + radius;
+                            }
 
-                        if (x2 < centerX - radius)
-                        {
-                            y2 = cluster.k * (centerX - radius) + cluster.b;
-                            x2 = centerX - radius;
-                        }
-                        else if (x2 > centerX + radius)
-                        {
-                            y2 = cluster.k * (centerX + radius) + cluster.b;
-                            x2 = centerX + radius;
-                        }
+                            if (x2 < centerX - radius)
+                            {
+                                y2 = cluster.k * (centerX - radius) + cluster.b;
+                                x2 = centerX - radius;
+                            }
+                            else if (x2 > centerX + radius)
+                            {
+                                y2 = cluster.k * (centerX + radius) + cluster.b;
+                                x2 = centerX + radius;
+                            }
 
-                        graphics.DrawString(cluster.wallId.ToString(), this.Font,
-                            new SolidBrush(color), (int)(cluster.Center.X * size + 200), (int)(cluster.Center.Y * size + 200), sf);
 
-                        try
-                        {
+                            try
+                            {
+                                Pen pen = new Pen(colors[cluster.wallId]);
                                 graphics.DrawEllipse(Pens.Black,
                                 (int)((cluster.Center.X - radius) * size + 200),
                                 (int)((cluster.Center.Y - radius) * size + 200),
@@ -225,12 +233,13 @@ namespace L1_ImageProcessing
                                 (int)(radius * 2 * size));
 
 
-                            graphics.DrawLine(Pens.Red, (int)(x1 * size + 200),
-                                                        (int)(y1 * size + 200),
-                                                        (int)(x2 * size + 200),
-                                                        (int)(y2 * size + 200));
+                                graphics.DrawLine(pen, (int)(x1 * size + 200),
+                                                            (int)(y1 * size + 200),
+                                                            (int)(x2 * size + 200),
+                                                            (int)(y2 * size + 200));
+                            }
+                            catch { }
                         }
-                        catch { }
                     }
                 }
             }
@@ -248,8 +257,9 @@ namespace L1_ImageProcessing
                     for (int j = i + 1; j < clusters.Length; j++)
                     {
                         var dangle = Math.Abs(clusters[i].angle - clusters[j].angle);
-                        var distance = GetDistance(clusters[i].Center, clusters[j].Center);
-                        if (distance <= threshold&& dangle<thresholdAngle)
+                        //var distance = GetDistance(clusters[i].Center, clusters[j].Center);
+                        if (CirclesIntersect(clusters[i].Center, threshold, clusters[j].Center, threshold)
+                        && dangle<thresholdAngle)
                         {
                             if (clusters[j].wallId != 0)
                             {
@@ -269,6 +279,18 @@ namespace L1_ImageProcessing
                 var dx = p1.X - p2.X;
                 var dy = p1.Y - p2.Y;
                 return (float)Math.Sqrt(dx * dx + dy * dy);
+            }
+            bool CirclesIntersect(PointF center1, double radius1, PointF center2, double radius2)
+            {
+                double distance = Math.Sqrt((center1.X - center2.X) * (center1.X - center2.X) + (center1.Y - center2.Y) * (center1.Y - center2.Y));
+                if (distance < radius1 + radius2 && distance > Math.Abs(radius1 - radius2))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
         private void CalculateClusterLine(Cluster[] clusters)
