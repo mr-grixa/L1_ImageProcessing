@@ -51,6 +51,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.numericUpDown_angl = new System.Windows.Forms.NumericUpDown();
             this.checkBox_DrawRadius = new System.Windows.Forms.CheckBox();
+            this.checkBox_wall = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownKlaster)).BeginInit();
@@ -285,11 +286,22 @@
             this.checkBox_DrawRadius.Text = "Радиус";
             this.checkBox_DrawRadius.UseVisualStyleBackColor = true;
             // 
+            // checkBox_wall
+            // 
+            this.checkBox_wall.AutoSize = true;
+            this.checkBox_wall.Location = new System.Drawing.Point(289, 282);
+            this.checkBox_wall.Name = "checkBox_wall";
+            this.checkBox_wall.Size = new System.Drawing.Size(58, 17);
+            this.checkBox_wall.TabIndex = 90;
+            this.checkBox_wall.Text = "Стены";
+            this.checkBox_wall.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.checkBox_wall);
             this.Controls.Add(this.checkBox_DrawRadius);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.numericUpDown_angl);
@@ -348,6 +360,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.NumericUpDown numericUpDown_angl;
         private System.Windows.Forms.CheckBox checkBox_DrawRadius;
+        private System.Windows.Forms.CheckBox checkBox_wall;
     }
 }
 

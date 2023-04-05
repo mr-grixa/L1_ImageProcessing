@@ -5,12 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using static L1_ImageProcessing.Form1;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
+using static System.Windows.Forms.LinkLabel;
 
 namespace L1_ImageProcessing
 {
@@ -18,6 +16,7 @@ namespace L1_ImageProcessing
     {
         StreamReader streamReader;
         List<PointF> points = new List<PointF>();
+        List<Line> lines = new List<Line>();
         Thread t;
         byte[] bytes;
         public Form1()
@@ -46,10 +45,10 @@ namespace L1_ImageProcessing
         }
         int[] data;
         private void button_next_Click(object sender, EventArgs e)
-        {            
+        {
             GenerateXY();
         }
-        
+
         private void GenerateXY()
         {
             bool streamReaderTest = true;
@@ -61,7 +60,7 @@ namespace L1_ImageProcessing
                 }
                 catch { streamReaderTest = false; }
             }
-            if (streamReaderTest&&!streamReader.EndOfStream)
+            if (streamReaderTest && !streamReader.EndOfStream)
             {
                 string[] valuses = streamReader.ReadLine()
                     .Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
@@ -84,22 +83,13 @@ namespace L1_ImageProcessing
                     points.Add(new PointF((float)X, (float)Y));
 
                 }
-                //Cluster[] clusters;
-                //if (clusters != null)
-                //{
-                //    Cluster[] clustersOld = clusters;
-                //    clusters = KMeans(points, (int)numericUpDownKlaster.Value);
-                //    Search(clustersOld);
-                //}
-                //else
-                //{
                 Draw();
             }
-
         }
+
         public void Draw()
         {
-            if (checkBox_claster.Checked&&points.Count>0)
+            if (checkBox_claster.Checked && points.Count > 0)
             {
                 Cluster[] clusters = KMeans(points, (int)numericUpDownKlaster.Value);
                 DrawClusters(clusters);
@@ -139,7 +129,7 @@ namespace L1_ImageProcessing
 
             CalculateClusterLine(clusters);
             SearchWall(clusters);
-            Color [] colors = new Color [clusters.Length]; 
+            Color[] colors = new Color[clusters.Length];
             for (int i = 0; i < colors.Length; i++)
             {
                 colors[i] = Color.FromArgb(random.Next(256), random.Next(256), random.Next(256));
@@ -151,7 +141,7 @@ namespace L1_ImageProcessing
                 if (cluster.Points.Count != 0)
                 {
 
-                    
+
 
                     foreach (PointF point in cluster.Points)
                     {
@@ -159,13 +149,18 @@ namespace L1_ImageProcessing
                         double Y = point.Y * size + 200;
                         if (X < 400 && X > 0 && Y < 400 && Y > 0)
                         {
-                            bitmap.SetPixel((int)(X), (int)(Y), colors[cluster.Id]);
+                            if (checkBox_wall.Checked) bitmap.SetPixel((int)(X), (int)(Y), colors[cluster.wallId]);
+                            else bitmap.SetPixel((int)(X), (int)(Y), colors[cluster.Id]);
+                            
                         }
                     }
 
                     using (Graphics graphics = Graphics.FromImage(bitmap))
                     {
-                        graphics.DrawString(cluster.Id.ToString(), this.Font,
+                        string text = "";
+                        if (checkBox_wall.Checked) text= cluster.wallId.ToString();
+                        else text = cluster.Id.ToString();
+                        graphics.DrawString(text, this.Font,
                              new SolidBrush(colors[cluster.wallId]), (int)(cluster.Center.X * size + 200), (int)(cluster.Center.Y * size + 200), sf);
 
                         if (checkBox_DrawRadius.Checked)
@@ -243,42 +238,92 @@ namespace L1_ImageProcessing
                     }
                 }
             }
+            using (Graphics graphics = Graphics.FromImage(bitmap))
+            {
+                foreach (Line line in lines)
+                {
+                    graphics.DrawLine(Pens.YellowGreen,  (int)(line.start.X * size + 200),
+                                                 (int)(line.start.Y * size + 200),
+                                                 (int)(line.finish.X * size + 200),
+                                                 (int)(line.finish.Y * size + 200));
+                }
+            }
+
             pictureBoxMain.Image = bitmap;
+        }
+
+        class groupsNeibor
+        {
+            public Cluster cluster { get; set; }
+            public int neibor { get; set; }
         }
 
         private void SearchWall(Cluster[] clusters)
         {
             double thresholdAngle = (double)numericUpDown_angl.Value * Math.PI / 180;
             double threshold = (double)numericUpDown_R.Value;
-            bool merged = true;
+
             int wallN = 0;
-                for (int i = 0; i < clusters.Length; i++)
+
+            List<List<Cluster>> groups = new List<List<Cluster>>();
+            List<Cluster> ungroupedClusters = new List<Cluster>(clusters);
+
+
+            while (ungroupedClusters.Count > 0)
+            {
+                // Создаем новую группу и добавляем в нее первый кластер из списка несгруппированных
+                List<groupsNeibor> currentGroup = new List<groupsNeibor> { };
+                currentGroup.Add(new groupsNeibor { cluster = ungroupedClusters[0], neibor = 0 });
+                ungroupedClusters.RemoveAt(0);
+                for (int j = 0; j < currentGroup.Count; j++)
                 {
-                    for (int j = i + 1; j < clusters.Length; j++)
+                    for (int i = 0; i < ungroupedClusters.Count; i++)
                     {
-                        var dangle = Math.Abs(clusters[i].angle - clusters[j].angle);
-                        //var distance = GetDistance(clusters[i].Center, clusters[j].Center);
-                        if (CirclesIntersect(clusters[i].Center, threshold, clusters[j].Center, threshold)
-                        && dangle<thresholdAngle)
+                        var dangle = Math.Abs(currentGroup[j].cluster.angle - ungroupedClusters[i].angle);
+                        if (CirclesIntersect(currentGroup[j].cluster.Center, threshold,
+                            ungroupedClusters[i].Center, threshold)
+                            && dangle <= thresholdAngle)
                         {
-                            if (clusters[j].wallId != 0)
-                            {
-                                clusters[i].wallId = clusters[j].wallId;
-                            }
-                            else
-                            {
-                                wallN++;
-                                clusters[i].wallId = wallN;
-                                clusters[j].wallId = wallN;
-                        }
+                            currentGroup[j].neibor++;
+                            currentGroup.Add(new groupsNeibor { cluster = ungroupedClusters[i], neibor = 1 }); ;
+                            ungroupedClusters.RemoveAt(i);
+                            i--;
                         }
                     }
+
+                }
+                bool start = true;
+                PointF startPoint = new PointF();
+                PointF finishPoint = new PointF();
+                List<Cluster> Group = new List<Cluster> { };
+                foreach (groupsNeibor nei in currentGroup)
+                {
+                    Group.Add(nei.cluster);
+                    if (nei.neibor == 1)
+                    {
+                        if (start)
+                        {
+                            startPoint = nei.cluster.Center;
+                            start = false;
+                        }
+                        else
+                        {
+                            finishPoint = nei.cluster.Center;
+                        }
+                    }
+                }
+                lines.Add(new Line(startPoint, finishPoint));
+                groups.Add(Group);
             }
-            float GetDistance(PointF p1, PointF p2)
+            int I = 0;
+            for (int i=0; i < groups.Count; i++)
             {
-                var dx = p1.X - p2.X;
-                var dy = p1.Y - p2.Y;
-                return (float)Math.Sqrt(dx * dx + dy * dy);
+                for (int j = 0; j < groups[i].Count; j++)
+                {
+                    clusters[I] = groups[i][j];
+                    clusters[I].wallId = i;
+                    I++;
+                }
             }
             bool CirclesIntersect(PointF center1, double radius1, PointF center2, double radius2)
             {
@@ -380,6 +425,19 @@ namespace L1_ImageProcessing
                 Center = center;
             }
         }
+        public class Line
+        {
+            public PointF start;
+            public PointF finish;
+
+            public Line(PointF start,
+                        PointF finish)
+            {
+                this.start = start;
+                this.finish = finish;
+            }           
+        }
+
 
         public Cluster[] KMeans(List<PointF> points, int k)
         {
@@ -510,7 +568,6 @@ namespace L1_ImageProcessing
 
         private void button_IP_lidar_Click(object sender, EventArgs e)
         {
-
             if (t == null)
             {
                 t = new Thread(new ThreadStart(StartListener));
@@ -570,13 +627,13 @@ namespace L1_ImageProcessing
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (t!=null)
+            if (t != null)
             {
-            if (t.ThreadState == ThreadState.Suspended)
-            {
-                t.Resume();            
-            }
-            t.Abort();
+                if (t.ThreadState == ThreadState.Suspended)
+                {
+                    t.Resume();
+                }
+                t.Abort();
             }
 
         }
