@@ -137,17 +137,16 @@ namespace L1_ImageProcessing
             sf.LineAlignment = StringAlignment.Center;
             sf.Alignment = StringAlignment.Center;
 
-            //listBox1.Items.Clear();
+            CalculateClusterLine(clusters);
+            SearchWall(clusters);
+
             foreach (Cluster cluster in clusters)
             {
                 if (cluster.Points.Count != 0)
                 {
 
                     Color color = Color.FromArgb(random.Next(256), random.Next(256), random.Next(256));
-                    double sumX = 0;
-                    double sumY = 0;
-                    double sumXY = 0;
-                    double sumX2 = 0;
+
                     foreach (PointF point in cluster.Points)
                     {
                         double X = point.X * size + 200;
@@ -156,83 +155,70 @@ namespace L1_ImageProcessing
                         {
                             bitmap.SetPixel((int)(X), (int)(Y), color);
                         }
-                        sumX += point.X;
-                        sumY += point.Y;
-                        sumXY += point.X * point.Y;
-                        sumX2 += point.X * point.X;
                     }
 
                     using (Graphics graphics = Graphics.FromImage(bitmap))
                     {
-                        graphics.DrawString(cluster.Id.ToString(), this.Font,
-                            new SolidBrush(color), (int)(cluster.Center.X * size + 200), (int)(cluster.Center.Y * size + 200), sf);
-                        //double N = cluster.Points.Count();
-                        //double k = ((N * XYsum) - (Xsum * Ysum))
-                        //        / ((N * XXsum) - (Xsum * Xsum));
-                        //double b = (Ysum - (k * Xsum)) / N;
-                        double n = cluster.Points.Count();
-
-                        double k = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
-                        double b = (sumY - cluster.k * sumX) / n;
-                        cluster.b = b;
-                        cluster.k = k;
+                       
 
                         double centerX = cluster.Center.X;
                         double centerY = cluster.Center.Y;
                         double radius = (double)numericUpDown_R.Value;
                         double x1 = cluster.Center.X - radius;
-                        double y1 = k * x1 + cluster.b;
+                        double y1 = cluster.k * x1 + cluster.b;
                         double x2 = cluster.Center.X + radius;
-                        double y2 = k * x2 + b;
+                        double y2 = cluster.k * x2 + cluster.b;
 
                         if (y1 < centerY - radius)
                         {
-                            x1 = (centerY - radius - b) / k;
+                            x1 = (centerY - radius - cluster.b) / cluster.k;
                             y1 = centerY - radius;
                         }
                         else if (y1 > centerY + radius)
                         {
-                            x1 = (centerY + radius - b) / k;
+                            x1 = (centerY + radius - cluster.b) / cluster.k;
                             y1 = centerY + radius;
                         }
 
                         if (y2 < centerY - radius)
                         {
-                            x2 = (centerY - radius - b) / k;
+                            x2 = (centerY - radius - cluster.b) / cluster.k;
                             y2 = centerY - radius;
                         }
                         else if (y2 > centerY + radius)
                         {
-                            x2 = (centerY + radius - b) / k;
+                            x2 = (centerY + radius - cluster.b) / cluster.k;
                             y2 = centerY + radius;
                         }
 
                         if (x1 < centerX - radius)
                         {
-                            y1 = k * (centerX - radius) + b;
+                            y1 = cluster.k * (centerX - radius) + cluster.b;
                             x1 = centerX - radius;
                         }
                         else if (x1 > centerX + radius)
                         {
-                            y1 = k * (centerX + radius) + b;
+                            y1 = cluster.k * (centerX + radius) + cluster.b;
                             x1 = centerX + radius;
                         }
 
                         if (x2 < centerX - radius)
                         {
-                            y2 = k * (centerX - radius) + b;
+                            y2 = cluster.k * (centerX - radius) + cluster.b;
                             x2 = centerX - radius;
                         }
                         else if (x2 > centerX + radius)
                         {
-                            y2 = k * (centerX + radius) + b;
+                            y2 = cluster.k * (centerX + radius) + cluster.b;
                             x2 = centerX + radius;
                         }
 
+                        graphics.DrawString(cluster.wallId.ToString(), this.Font,
+                            new SolidBrush(color), (int)(cluster.Center.X * size + 200), (int)(cluster.Center.Y * size + 200), sf);
+
                         try
                         {
-                            //listBox1.Items.Add(Math.Round(cluster.k,2) + " " + Math.Round(cluster.b, 2) + " " + cluster.Id);
-                            graphics.DrawEllipse(Pens.Black,
+                                graphics.DrawEllipse(Pens.Black,
                                 (int)((cluster.Center.X - radius) * size + 200),
                                 (int)((cluster.Center.Y - radius) * size + 200),
                                 (int)(radius * 2 * size),
@@ -249,6 +235,63 @@ namespace L1_ImageProcessing
                 }
             }
             pictureBoxMain.Image = bitmap;
+        }
+
+        private void SearchWall(Cluster[] clusters)
+        {
+            double thresholdAngle = (double)numericUpDown_angl.Value * Math.PI / 180;
+            double threshold = (double)numericUpDown_R.Value;
+            bool merged = true;
+            int wallN = 0;
+                for (int i = 0; i < clusters.Length; i++)
+                {
+                    for (int j = i + 1; j < clusters.Length; j++)
+                    {
+                        var dangle = Math.Abs(clusters[i].angle - clusters[j].angle);
+                        var distance = GetDistance(clusters[i].Center, clusters[j].Center);
+                        if (distance <= threshold&& dangle<thresholdAngle)
+                        {
+                            if (clusters[j].wallId != 0)
+                            {
+                                clusters[i].wallId = clusters[j].wallId;
+                            }
+                            else
+                            {
+                                wallN++;
+                                clusters[i].wallId = wallN;
+                                clusters[j].wallId = wallN;
+                        }
+                        }
+                    }
+            }
+            float GetDistance(PointF p1, PointF p2)
+            {
+                var dx = p1.X - p2.X;
+                var dy = p1.Y - p2.Y;
+                return (float)Math.Sqrt(dx * dx + dy * dy);
+            }
+        }
+        private void CalculateClusterLine(Cluster[] clusters)
+        {
+            foreach (Cluster cluster in clusters)
+            {
+                double sumX = 0;
+                double sumY = 0;
+                double sumXY = 0;
+                double sumX2 = 0;
+                foreach (PointF point in cluster.Points)
+                {
+                    sumX += point.X;
+                    sumY += point.Y;
+                    sumXY += point.X * point.Y;
+                    sumX2 += point.X * point.X;
+                }
+                double n = cluster.Points.Count();
+                cluster.k = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+                cluster.b = (sumY - cluster.k * sumX) / n;
+                cluster.angle = Math.Abs(Math.Atan(cluster.k));
+            }
+
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -304,9 +347,10 @@ namespace L1_ImageProcessing
             public int Id;// Идентификатор кластера
             public List<PointF> Points; // Список точек кластера
             public PointF Center; // Центр кластера
-            public double k; // Прямая
-            public double b; 
-
+            public double angle; // Прямая
+            public double k;
+            public double b;
+            public int wallId;
             public Cluster(int id, List<PointF> points, PointF center)
             {
                 Id = id;

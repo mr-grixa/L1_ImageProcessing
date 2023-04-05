@@ -48,11 +48,14 @@
             this.textBox_Port = new System.Windows.Forms.TextBox();
             this.button_IP_lidar = new System.Windows.Forms.Button();
             this.checkBox_claster = new System.Windows.Forms.CheckBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.numericUpDown_angl = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownKlaster)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_R)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_angl)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBoxMain
@@ -245,11 +248,39 @@
             this.checkBox_claster.Text = "Кластеры";
             this.checkBox_claster.UseVisualStyleBackColor = true;
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(220, 255);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(94, 13);
+            this.label4.TabIndex = 88;
+            this.label4.Text = "Допуск градусов";
+            // 
+            // numericUpDown_angl
+            // 
+            this.numericUpDown_angl.Location = new System.Drawing.Point(313, 255);
+            this.numericUpDown_angl.Maximum = new decimal(new int[] {
+            360,
+            0,
+            0,
+            0});
+            this.numericUpDown_angl.Name = "numericUpDown_angl";
+            this.numericUpDown_angl.Size = new System.Drawing.Size(69, 20);
+            this.numericUpDown_angl.TabIndex = 87;
+            this.numericUpDown_angl.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.numericUpDown_angl);
             this.Controls.Add(this.checkBox_claster);
             this.Controls.Add(this.button_IP_lidar);
             this.Controls.Add(this.textBox_Port);
@@ -275,6 +306,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownKlaster)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_R)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_angl)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -301,6 +333,8 @@
         private System.Windows.Forms.TextBox textBox_Port;
         private System.Windows.Forms.Button button_IP_lidar;
         private System.Windows.Forms.CheckBox checkBox_claster;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.NumericUpDown numericUpDown_angl;
     }
 }
 
