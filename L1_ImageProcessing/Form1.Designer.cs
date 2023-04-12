@@ -62,8 +62,8 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownKlaster)).BeginInit();
@@ -75,14 +75,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_sdwid_R)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_sdwid_G)).BeginInit();
             this.groupBox1.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBoxMain
             // 
             this.pictureBoxMain.BackColor = System.Drawing.SystemColors.WindowFrame;
-            this.pictureBoxMain.Location = new System.Drawing.Point(388, 12);
+            this.pictureBoxMain.Location = new System.Drawing.Point(387, 11);
             this.pictureBoxMain.Name = "pictureBoxMain";
             this.pictureBoxMain.Size = new System.Drawing.Size(400, 400);
             this.pictureBoxMain.TabIndex = 0;
@@ -91,14 +90,14 @@
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(405, 422);
+            this.numericUpDown1.Location = new System.Drawing.Point(404, 421);
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(58, 20);
             this.numericUpDown1.TabIndex = 1;
             // 
             // button_next
             // 
-            this.button_next.Location = new System.Drawing.Point(130, 393);
+            this.button_next.Location = new System.Drawing.Point(129, 392);
             this.button_next.Name = "button_next";
             this.button_next.Size = new System.Drawing.Size(75, 23);
             this.button_next.TabIndex = 5;
@@ -108,7 +107,7 @@
             // 
             // button_load
             // 
-            this.button_load.Location = new System.Drawing.Point(12, 419);
+            this.button_load.Location = new System.Drawing.Point(11, 418);
             this.button_load.Name = "button_load";
             this.button_load.Size = new System.Drawing.Size(111, 23);
             this.button_load.TabIndex = 68;
@@ -118,7 +117,7 @@
             // 
             // textBox_path
             // 
-            this.textBox_path.Location = new System.Drawing.Point(130, 422);
+            this.textBox_path.Location = new System.Drawing.Point(129, 421);
             this.textBox_path.Name = "textBox_path";
             this.textBox_path.Size = new System.Drawing.Size(269, 20);
             this.textBox_path.TabIndex = 71;
@@ -134,7 +133,7 @@
             // 
             // button_start
             // 
-            this.button_start.Location = new System.Drawing.Point(12, 393);
+            this.button_start.Location = new System.Drawing.Point(11, 392);
             this.button_start.Name = "button_start";
             this.button_start.Size = new System.Drawing.Size(111, 23);
             this.button_start.TabIndex = 73;
@@ -144,7 +143,7 @@
             // 
             // numericUpDownKlaster
             // 
-            this.numericUpDownKlaster.Location = new System.Drawing.Point(280, 12);
+            this.numericUpDownKlaster.Location = new System.Drawing.Point(279, 11);
             this.numericUpDownKlaster.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -172,7 +171,7 @@
             0,
             0,
             131072});
-            this.numericUpDownSize.Location = new System.Drawing.Point(280, 38);
+            this.numericUpDownSize.Location = new System.Drawing.Point(279, 37);
             this.numericUpDownSize.Name = "numericUpDownSize";
             this.numericUpDownSize.Size = new System.Drawing.Size(102, 20);
             this.numericUpDownSize.TabIndex = 76;
@@ -186,7 +185,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(217, 14);
+            this.label1.Location = new System.Drawing.Point(216, 13);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(57, 13);
             this.label1.TabIndex = 77;
@@ -195,7 +194,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(218, 40);
+            this.label2.Location = new System.Drawing.Point(217, 39);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(56, 13);
             this.label2.TabIndex = 78;
@@ -209,7 +208,7 @@
             0,
             0,
             0});
-            this.numericUpDown_R.Location = new System.Drawing.Point(280, 100);
+            this.numericUpDown_R.Location = new System.Drawing.Point(279, 99);
             this.numericUpDown_R.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -227,7 +226,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(220, 102);
+            this.label3.Location = new System.Drawing.Point(219, 101);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(43, 13);
             this.label3.TabIndex = 80;
@@ -235,7 +234,7 @@
             // 
             // textBox_IP
             // 
-            this.textBox_IP.Location = new System.Drawing.Point(223, 143);
+            this.textBox_IP.Location = new System.Drawing.Point(222, 142);
             this.textBox_IP.Name = "textBox_IP";
             this.textBox_IP.Size = new System.Drawing.Size(69, 20);
             this.textBox_IP.TabIndex = 81;
@@ -243,7 +242,7 @@
             // 
             // textBox_Port
             // 
-            this.textBox_Port.Location = new System.Drawing.Point(313, 143);
+            this.textBox_Port.Location = new System.Drawing.Point(312, 142);
             this.textBox_Port.Name = "textBox_Port";
             this.textBox_Port.Size = new System.Drawing.Size(69, 20);
             this.textBox_Port.TabIndex = 82;
@@ -251,7 +250,7 @@
             // 
             // button_IP_lidar
             // 
-            this.button_IP_lidar.Location = new System.Drawing.Point(223, 169);
+            this.button_IP_lidar.Location = new System.Drawing.Point(222, 168);
             this.button_IP_lidar.Name = "button_IP_lidar";
             this.button_IP_lidar.Size = new System.Drawing.Size(159, 54);
             this.button_IP_lidar.TabIndex = 83;
@@ -264,7 +263,7 @@
             this.checkBox_claster.AutoSize = true;
             this.checkBox_claster.Checked = true;
             this.checkBox_claster.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox_claster.Location = new System.Drawing.Point(13, 370);
+            this.checkBox_claster.Location = new System.Drawing.Point(12, 369);
             this.checkBox_claster.Name = "checkBox_claster";
             this.checkBox_claster.Size = new System.Drawing.Size(76, 17);
             this.checkBox_claster.TabIndex = 86;
@@ -274,7 +273,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(220, 253);
+            this.label4.Location = new System.Drawing.Point(219, 252);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(94, 13);
             this.label4.TabIndex = 88;
@@ -282,7 +281,7 @@
             // 
             // numericUpDown_angl
             // 
-            this.numericUpDown_angl.Location = new System.Drawing.Point(313, 253);
+            this.numericUpDown_angl.Location = new System.Drawing.Point(312, 252);
             this.numericUpDown_angl.Maximum = new decimal(new int[] {
             360,
             0,
@@ -300,7 +299,7 @@
             // checkBox_DrawRadius
             // 
             this.checkBox_DrawRadius.AutoSize = true;
-            this.checkBox_DrawRadius.Location = new System.Drawing.Point(95, 370);
+            this.checkBox_DrawRadius.Location = new System.Drawing.Point(94, 369);
             this.checkBox_DrawRadius.Name = "checkBox_DrawRadius";
             this.checkBox_DrawRadius.Size = new System.Drawing.Size(62, 17);
             this.checkBox_DrawRadius.TabIndex = 89;
@@ -310,7 +309,7 @@
             // checkBox_wall
             // 
             this.checkBox_wall.AutoSize = true;
-            this.checkBox_wall.Location = new System.Drawing.Point(156, 370);
+            this.checkBox_wall.Location = new System.Drawing.Point(155, 369);
             this.checkBox_wall.Name = "checkBox_wall";
             this.checkBox_wall.Size = new System.Drawing.Size(58, 17);
             this.checkBox_wall.TabIndex = 90;
@@ -319,7 +318,7 @@
             // 
             // trackBar1
             // 
-            this.trackBar1.Location = new System.Drawing.Point(221, 67);
+            this.trackBar1.Location = new System.Drawing.Point(220, 66);
             this.trackBar1.Maximum = 20;
             this.trackBar1.Minimum = 1;
             this.trackBar1.Name = "trackBar1";
@@ -331,7 +330,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(220, 276);
+            this.label5.Location = new System.Drawing.Point(219, 275);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(118, 13);
             this.label5.TabIndex = 92;
@@ -339,7 +338,7 @@
             // 
             // numericUpDown2
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(221, 292);
+            this.numericUpDown2.Location = new System.Drawing.Point(220, 291);
             this.numericUpDown2.Maximum = new decimal(new int[] {
             360,
             0,
@@ -357,7 +356,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(220, 358);
+            this.label6.Location = new System.Drawing.Point(219, 357);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(43, 13);
             this.label6.TabIndex = 95;
@@ -371,7 +370,7 @@
             0,
             0,
             0});
-            this.numericUpDown_sdwid_R.Location = new System.Drawing.Point(280, 356);
+            this.numericUpDown_sdwid_R.Location = new System.Drawing.Point(279, 355);
             this.numericUpDown_sdwid_R.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -389,7 +388,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(220, 379);
+            this.label7.Location = new System.Drawing.Point(219, 378);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(94, 13);
             this.label7.TabIndex = 97;
@@ -397,7 +396,7 @@
             // 
             // numericUpDown_sdwid_G
             // 
-            this.numericUpDown_sdwid_G.Location = new System.Drawing.Point(313, 379);
+            this.numericUpDown_sdwid_G.Location = new System.Drawing.Point(312, 378);
             this.numericUpDown_sdwid_G.Maximum = new decimal(new int[] {
             360,
             0,
@@ -416,7 +415,7 @@
             // 
             this.groupBox1.BackColor = System.Drawing.SystemColors.Control;
             this.groupBox1.Controls.Add(this.groupBox2);
-            this.groupBox1.Location = new System.Drawing.Point(221, 230);
+            this.groupBox1.Location = new System.Drawing.Point(220, 229);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(161, 97);
             this.groupBox1.TabIndex = 99;
@@ -436,37 +435,41 @@
             // groupBox3
             // 
             this.groupBox3.BackColor = System.Drawing.SystemColors.Control;
-            this.groupBox3.Controls.Add(this.groupBox4);
-            this.groupBox3.Location = new System.Drawing.Point(221, 333);
+            this.groupBox3.Location = new System.Drawing.Point(220, 332);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(161, 66);
+            this.groupBox3.Size = new System.Drawing.Size(161, 73);
             this.groupBox3.TabIndex = 101;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Отслеживание объектов";
             // 
-            // groupBox4
-            // 
-            this.groupBox4.BackColor = System.Drawing.SystemColors.Control;
-            this.groupBox4.Location = new System.Drawing.Point(-1, 103);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(162, 79);
-            this.groupBox4.TabIndex = 100;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Отслеживание объектов";
-            // 
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 40);
+            this.dataGridView1.Location = new System.Drawing.Point(11, 39);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(193, 324);
             this.dataGridView1.TabIndex = 102;
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Кластеры ",
+            "Точки ",
+            "Стены ",
+            "Объекты"});
+            this.comboBox1.Location = new System.Drawing.Point(12, 12);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(192, 21);
+            this.comboBox1.TabIndex = 103;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.numericUpDown_sdwid_G);
@@ -511,7 +514,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_sdwid_R)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_sdwid_G)).EndInit();
             this.groupBox1.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -552,8 +554,8 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
 

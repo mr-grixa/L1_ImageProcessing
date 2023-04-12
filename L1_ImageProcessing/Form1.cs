@@ -27,6 +27,7 @@ namespace L1_ImageProcessing
             InitializeComponent();
             linesOld.Add(new Line(new PointF(0, 0), new PointF(0, 0), 0));
             bloksOld.Add(new Blok(new PointF(0, 0), 0));
+            comboBox1.SelectedIndex = 0;
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
@@ -102,28 +103,139 @@ namespace L1_ImageProcessing
                     bitmap = DrawData(clusters, bitmap);
                 pictureBoxMain.Image = bitmap;
 
-                // Создаем новую таблицу
-                DataTable table = new DataTable();
-
-                // Добавляем колонки X и Y
-                table.Columns.Add("X", typeof(double));
-                table.Columns.Add("Y", typeof(double));
-
-               
-                // Заполняем таблицу данными из массива
-                for (int i = 0; i < points.Count(); i++)
+                switch(comboBox1.SelectedIndex)
                 {
-                    DataRow row = table.NewRow();
-                    row["X"] = points[i].X;  
-                    row["Y"] = points[i].Y;
-                    table.Rows.Add(row);
-                }
-                dataGridView1.DataSource = table;
-                dataGridView1.Columns["X"].Width = 40;
-                dataGridView1.Columns["j"].Width = 40;
-
+                    case 0:
+                        // Кластеры 
+                        TableCluster(clusters);
+                        break;
+                    case 1:
+                        // Точки 
+                        TablePoint();
+                        break;
+                    case 2:
+                        // Стены  
+                        TableWall();
+                        break;
+                    case 3:
+                        // Объекты 
+                        TableObject();
+                        break;
+                }               
             }
+        }
 
+        public void TableWall()
+        {
+            // Создаем новую таблицу
+            DataTable table = new DataTable();
+
+            // Добавляем колонки
+            table.Columns.Add("ID", typeof(int));
+            table.Columns.Add("X1", typeof(double));
+            table.Columns.Add("Y1", typeof(double));
+            table.Columns.Add("X2", typeof(double));
+            table.Columns.Add("Y2", typeof(double));
+
+            // Заполняем таблицу данными
+            for (int i = 0; i < linesOld.Count(); i++)
+            {
+                DataRow row = table.NewRow();
+                row["X1"] = linesOld[i].firstPoint.X;
+                row["Y1"] = linesOld[i].firstPoint.Y;
+                row["X2"] = linesOld[i].lastPoint.X;
+                row["Y2"] = linesOld[i].lastPoint.Y;
+                row["ID"] = linesOld[i].lineId;
+                table.Rows.Add(row);
+            }
+            // Заполняем таблицу меняем размер
+            dataGridView1.DataSource = table;
+            dataGridView1.Columns["ID"].Width = 30;
+            dataGridView1.Columns["X1"].Width = 40;
+            dataGridView1.Columns["Y1"].Width = 40;
+            dataGridView1.Columns["X2"].Width = 40;
+            dataGridView1.Columns["Y2"].Width = 40;
+            dataGridView1.RowHeadersWidth = 10;
+            //dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        }
+        public void TableObject()
+        {
+            // Создаем новую таблицу
+            DataTable table = new DataTable();
+
+            // Добавляем колонки
+            table.Columns.Add("ID", typeof(int));
+            table.Columns.Add("X", typeof(double));
+            table.Columns.Add("Y", typeof(double));
+
+            // Заполняем таблицу данными
+            for (int i = 0; i < bloksOld.Count(); i++)
+            {
+                DataRow row = table.NewRow();
+                row["X"] = bloksOld[i].Point.X;
+                row["Y"] = bloksOld[i].Point.Y;
+                row["ID"] = bloksOld[i].i;
+                table.Rows.Add(row);
+            }
+            // Заполняем таблицу меняем размер
+            dataGridView1.DataSource = table;
+            dataGridView1.Columns["ID"].Width = 40;
+            dataGridView1.Columns["X"].Width = 60;
+            dataGridView1.Columns["Y"].Width = 60;
+            dataGridView1.RowHeadersWidth = 10;
+            //dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        }
+        public void TableCluster(Cluster[] clusters)
+        {
+            // Создаем новую таблицу
+            DataTable table = new DataTable();
+
+            // Добавляем колонки
+            table.Columns.Add("ID", typeof(int));
+            table.Columns.Add("X", typeof(double));
+            table.Columns.Add("Y", typeof(double));
+            table.Columns.Add("Weight", typeof(int));
+
+            // Заполняем таблицу данными
+            for (int i = 0; i < clusters.Count(); i++)
+            {
+                DataRow row = table.NewRow();
+                row["X"] = clusters[i].Center.X;
+                row["Y"] = clusters[i].Center.Y;
+                row["ID"] = clusters[i].Id;
+                row["Weight"] = clusters[i].Points.Count();
+                table.Rows.Add(row);
+            }
+            // Заполняем таблицу меняем размер
+            dataGridView1.DataSource = table;
+            dataGridView1.Columns["ID"].Width = 20;
+            dataGridView1.Columns["Weight"].Width = 60;
+            dataGridView1.Columns["X"].Width = 40;
+            dataGridView1.Columns["Y"].Width = 40;
+            dataGridView1.RowHeadersWidth = 10;
+            //dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        }
+        public void TablePoint()
+        {
+            // Создаем новую таблицу
+            DataTable table = new DataTable();
+
+            // Добавляем колонки X и Y
+            table.Columns.Add("X", typeof(double));
+            table.Columns.Add("Y", typeof(double));
+            dataGridView1.RowHeadersWidth = 10;
+
+            // Заполняем таблицу данными из массива
+            for (int i = 0; i < points.Count(); i++)
+            {
+                DataRow row = table.NewRow();
+                row["X"] = points[i].X;
+                row["Y"] = points[i].Y;
+                table.Rows.Add(row);
+            }
+            dataGridView1.DataSource = table;
+            dataGridView1.Columns["X"].Width = 80;
+            dataGridView1.Columns["Y"].Width = 80;
         }
         public Bitmap DrawDot(List<PointF> points, Bitmap bitmap)
         {
