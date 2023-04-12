@@ -26,6 +26,7 @@
         /// Требуемый метод для поддержки конструктора — не изменяйте 
         /// содержимое этого метода с помощью редактора кода.
         /// </summary>
+        [System.Obsolete]
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
@@ -138,7 +139,7 @@
             this.numericUpDownKlaster.Size = new System.Drawing.Size(102, 20);
             this.numericUpDownKlaster.TabIndex = 75;
             this.numericUpDownKlaster.Value = new decimal(new int[] {
-            20,
+            50,
             0,
             0,
             0});
@@ -198,7 +199,7 @@
             this.numericUpDown_R.Size = new System.Drawing.Size(102, 20);
             this.numericUpDown_R.TabIndex = 79;
             this.numericUpDown_R.Value = new decimal(new int[] {
-            300,
+            420,
             0,
             0,
             0});
