@@ -53,12 +53,17 @@
             this.numericUpDown_angl = new System.Windows.Forms.NumericUpDown();
             this.checkBox_DrawRadius = new System.Windows.Forms.CheckBox();
             this.checkBox_wall = new System.Windows.Forms.CheckBox();
+            this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.label5 = new System.Windows.Forms.Label();
+            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownKlaster)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_R)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_angl)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBoxMain
@@ -135,6 +140,16 @@
             // numericUpDownKlaster
             // 
             this.numericUpDownKlaster.Location = new System.Drawing.Point(280, 12);
+            this.numericUpDownKlaster.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.numericUpDownKlaster.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.numericUpDownKlaster.Name = "numericUpDownKlaster";
             this.numericUpDownKlaster.Size = new System.Drawing.Size(102, 20);
             this.numericUpDownKlaster.TabIndex = 75;
@@ -157,10 +172,10 @@
             this.numericUpDownSize.Size = new System.Drawing.Size(102, 20);
             this.numericUpDownSize.TabIndex = 76;
             this.numericUpDownSize.Value = new decimal(new int[] {
-            1,
+            5,
             0,
             0,
-            65536});
+            131072});
             this.numericUpDownSize.ValueChanged += new System.EventHandler(this.numericUpDownSize_ValueChanged);
             // 
             // label1
@@ -297,11 +312,50 @@
             this.checkBox_wall.Text = "Стены";
             this.checkBox_wall.UseVisualStyleBackColor = true;
             // 
+            // trackBar1
+            // 
+            this.trackBar1.Location = new System.Drawing.Point(221, 67);
+            this.trackBar1.Maximum = 20;
+            this.trackBar1.Minimum = 1;
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.Size = new System.Drawing.Size(161, 45);
+            this.trackBar1.TabIndex = 91;
+            this.trackBar1.Value = 5;
+            this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(220, 312);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(118, 13);
+            this.label5.TabIndex = 92;
+            this.label5.Text = "Мин точек в кластере";
+            // 
+            // numericUpDown2
+            // 
+            this.numericUpDown2.Location = new System.Drawing.Point(223, 335);
+            this.numericUpDown2.Maximum = new decimal(new int[] {
+            360,
+            0,
+            0,
+            0});
+            this.numericUpDown2.Name = "numericUpDown2";
+            this.numericUpDown2.Size = new System.Drawing.Size(69, 20);
+            this.numericUpDown2.TabIndex = 93;
+            this.numericUpDown2.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.numericUpDown2);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.checkBox_wall);
             this.Controls.Add(this.checkBox_DrawRadius);
             this.Controls.Add(this.label4);
@@ -323,6 +377,7 @@
             this.Controls.Add(this.button_next);
             this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.pictureBoxMain);
+            this.Controls.Add(this.trackBar1);
             this.Name = "Form1";
             this.Text = "Form1";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
@@ -332,6 +387,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_R)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_angl)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -362,6 +419,9 @@
         private System.Windows.Forms.NumericUpDown numericUpDown_angl;
         private System.Windows.Forms.CheckBox checkBox_DrawRadius;
         private System.Windows.Forms.CheckBox checkBox_wall;
+        private System.Windows.Forms.TrackBar trackBar1;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.NumericUpDown numericUpDown2;
     }
 }
 

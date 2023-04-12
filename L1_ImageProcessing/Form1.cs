@@ -8,7 +8,6 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Windows.Forms;
 using static L1_ImageProcessing.Form1;
-using static System.Windows.Forms.LinkLabel;
 
 namespace L1_ImageProcessing
 {
@@ -16,6 +15,8 @@ namespace L1_ImageProcessing
     {
         StreamReader streamReader;
         List<PointF> points = new List<PointF>();
+        List<Blok> bloks = new List<Blok>();
+        List<Blok> bloksOld = new List<Blok>();
         List<Line> lines = new List<Line>();
         public List<Line> linesOld = new List<Line>();
         Thread t;
@@ -23,7 +24,8 @@ namespace L1_ImageProcessing
         public Form1()
         {
             InitializeComponent();
-            linesOld.Add(new Line(new PointF(0,0), new PointF(0, 0), 0));
+            linesOld.Add(new Line(new PointF(0, 0), new PointF(0, 0), 0));
+            bloksOld.Add(new Blok(new PointF(0, 0), 0));
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
@@ -95,11 +97,11 @@ namespace L1_ImageProcessing
                 if (checkBox_claster.Checked)
                     bitmap = DrawClusters(clusters, bitmap);
                 else
-                    bitmap =DrawDot(points, bitmap);
+                    bitmap = DrawDot(points, bitmap);
                 if (checkBox_DrawRadius.Checked)
-                    bitmap=DrawRadius(clusters, bitmap);
+                    bitmap = DrawRadius(clusters, bitmap);
                 if (checkBox_wall.Checked)
-                    bitmap =DrawData(clusters, bitmap);
+                    bitmap = DrawData(clusters, bitmap);
                 pictureBoxMain.Image = bitmap;
             }
 
@@ -123,15 +125,12 @@ namespace L1_ImageProcessing
         public Bitmap DrawData(Cluster[] clusters, Bitmap bitmap)
         {
 
-            Random random = new Random(10);
+            
             double size = (double)numericUpDownSize.Value;
             CalculateClusterLine(clusters);
             SearchWall(clusters);
-
-
-                LineMatching matching = new LineMatching();
-                linesOld = matching.MatchLines(lines, linesOld);
-
+            linesOld = Matching.MatchLines(lines, linesOld);
+            bloksOld = Matching.MatchBloks(bloks, bloksOld);
             using (Graphics graphics = Graphics.FromImage(bitmap))
             {
                 StringFormat sf = new StringFormat();
@@ -140,6 +139,7 @@ namespace L1_ImageProcessing
                 //listBox1.Items.Clear();
                 foreach (Line line in linesOld)
                 {
+                    Random random = new Random(line.lineId);
                     Color color = Color.FromArgb(random.Next(256), random.Next(256), random.Next(256));
                     Pen pen = new Pen(color);
                     pen.Width = 5;
@@ -152,11 +152,17 @@ namespace L1_ImageProcessing
                     graphics.DrawString(text, this.Font,
                         Brushes.Red, (int)(((line.firstPoint.X + line.lastPoint.X) / 2) * size + 200), (int)(((line.firstPoint.Y + line.lastPoint.Y) / 2) * size + 200), sf);
                 }
-            }
-            for (int i = 0; i < linesOld.Count; i++)
-            {
-                listBox1.Items.Add(linesOld[i].lineId.ToString());
-                
+                foreach(Blok blok in bloksOld)
+                {
+                    Random random = new Random(blok.i);
+                    Color color = Color.FromArgb(random.Next(256), random.Next(256), random.Next(256));
+                    Pen pen = new Pen(color);
+                    PointF point = blok.Point;
+                    graphics.DrawRectangle(pen, (int)((point.X * size + 200) - 10), (int)((point.Y) * size + 200) - 10, 20, 20);
+                    string text = blok.i.ToString();
+                    graphics.DrawString(text, this.Font,
+                    Brushes.DarkOrange, (int)(blok.Point.X * size + 200), (int)(blok.Point.Y * size + 200), sf);
+                }
             }
             return bitmap;
         }
@@ -177,8 +183,8 @@ namespace L1_ImageProcessing
                         double Y = point.Y * size + 200;
                         if (X < 400 && X > 0 && Y < 400 && Y > 0)
                         {
-                            bitmap.SetPixel((int)(X), (int)(Y), color);                          
-                        }    
+                            bitmap.SetPixel((int)(X), (int)(Y), color);
+                        }
                     }
                 }
             }
@@ -205,83 +211,83 @@ namespace L1_ImageProcessing
                 {
                     using (Graphics graphics = Graphics.FromImage(bitmap))
                     {
-                        
+
                         string text = cluster.Points.Count.ToString();
                         graphics.DrawString(text, this.Font,
                              new SolidBrush(colors[cluster.wallId]), (int)(cluster.Center.X * size + 200), (int)(cluster.Center.Y * size + 200), sf);
 
 
-                            double centerX = cluster.Center.X;
-                            double centerY = cluster.Center.Y;
-                            double radius = (double)numericUpDown_R.Value;
-                            double x1 = cluster.Center.X - radius;
-                            double y1 = cluster.k * x1 + cluster.b;
-                            double x2 = cluster.Center.X + radius;
-                            double y2 = cluster.k * x2 + cluster.b;
+                        double centerX = cluster.Center.X;
+                        double centerY = cluster.Center.Y;
+                        double radius = (double)numericUpDown_R.Value;
+                        double x1 = cluster.Center.X - radius;
+                        double y1 = cluster.k * x1 + cluster.b;
+                        double x2 = cluster.Center.X + radius;
+                        double y2 = cluster.k * x2 + cluster.b;
 
-                            #region Проверка радиуса
-                            if (y1 < centerY - radius)
-                            {
-                                x1 = (centerY - radius - cluster.b) / cluster.k;
-                                y1 = centerY - radius;
-                            }
-                            else if (y1 > centerY + radius)
-                            {
-                                x1 = (centerY + radius - cluster.b) / cluster.k;
-                                y1 = centerY + radius;
-                            }
+                        #region Проверка радиуса
+                        if (y1 < centerY - radius)
+                        {
+                            x1 = (centerY - radius - cluster.b) / cluster.k;
+                            y1 = centerY - radius;
+                        }
+                        else if (y1 > centerY + radius)
+                        {
+                            x1 = (centerY + radius - cluster.b) / cluster.k;
+                            y1 = centerY + radius;
+                        }
 
-                            if (y2 < centerY - radius)
-                            {
-                                x2 = (centerY - radius - cluster.b) / cluster.k;
-                                y2 = centerY - radius;
-                            }
-                            else if (y2 > centerY + radius)
-                            {
-                                x2 = (centerY + radius - cluster.b) / cluster.k;
-                                y2 = centerY + radius;
-                            }
+                        if (y2 < centerY - radius)
+                        {
+                            x2 = (centerY - radius - cluster.b) / cluster.k;
+                            y2 = centerY - radius;
+                        }
+                        else if (y2 > centerY + radius)
+                        {
+                            x2 = (centerY + radius - cluster.b) / cluster.k;
+                            y2 = centerY + radius;
+                        }
 
-                            if (x1 < centerX - radius)
-                            {
-                                y1 = cluster.k * (centerX - radius) + cluster.b;
-                                x1 = centerX - radius;
-                            }
-                            else if (x1 > centerX + radius)
-                            {
-                                y1 = cluster.k * (centerX + radius) + cluster.b;
-                                x1 = centerX + radius;
-                            }
+                        if (x1 < centerX - radius)
+                        {
+                            y1 = cluster.k * (centerX - radius) + cluster.b;
+                            x1 = centerX - radius;
+                        }
+                        else if (x1 > centerX + radius)
+                        {
+                            y1 = cluster.k * (centerX + radius) + cluster.b;
+                            x1 = centerX + radius;
+                        }
 
-                            if (x2 < centerX - radius)
-                            {
-                                y2 = cluster.k * (centerX - radius) + cluster.b;
-                                x2 = centerX - radius;
-                            }
-                            else if (x2 > centerX + radius)
-                            {
-                                y2 = cluster.k * (centerX + radius) + cluster.b;
-                                x2 = centerX + radius;
-                            }
-                            #endregion
+                        if (x2 < centerX - radius)
+                        {
+                            y2 = cluster.k * (centerX - radius) + cluster.b;
+                            x2 = centerX - radius;
+                        }
+                        else if (x2 > centerX + radius)
+                        {
+                            y2 = cluster.k * (centerX + radius) + cluster.b;
+                            x2 = centerX + radius;
+                        }
+                        #endregion
 
-                            try
-                            {
-                                Pen pen = new Pen(colors[cluster.Id]);
-                                graphics.DrawEllipse(Pens.Black,
-                                (int)((cluster.Center.X - radius) * size + 200),
-                                (int)((cluster.Center.Y - radius) * size + 200),
-                                (int)(radius * 2 * size),
-                                (int)(radius * 2 * size));
+                        try
+                        {
+                            Pen pen = new Pen(colors[cluster.Id]);
+                            graphics.DrawEllipse(Pens.Black,
+                            (int)((cluster.Center.X - radius) * size + 200),
+                            (int)((cluster.Center.Y - radius) * size + 200),
+                            (int)(radius * 2 * size),
+                            (int)(radius * 2 * size));
 
 
-                                graphics.DrawLine(pen, (int)(x1 * size + 200),
-                                                            (int)(y1 * size + 200),
-                                                            (int)(x2 * size + 200),
-                                                            (int)(y2 * size + 200));
-                            }
-                            catch { }
-                        
+                            graphics.DrawLine(pen, (int)(x1 * size + 200),
+                                                        (int)(y1 * size + 200),
+                                                        (int)(x2 * size + 200),
+                                                        (int)(y2 * size + 200));
+                        }
+                        catch { }
+
                     }
                 }
             }
@@ -297,7 +303,8 @@ namespace L1_ImageProcessing
             List<List<Cluster>> groups = new List<List<Cluster>>();
             List<Cluster> ungroupedClusters = new List<Cluster>(clusters);
 
-            lines.Clear();
+            lines = new List<Line>();
+            bloks = new List<Blok>();
             while (ungroupedClusters.Count > 0)
             {
                 // Создаем новую группу и добавляем в нее первый кластер из списка несгруппированных
@@ -310,7 +317,7 @@ namespace L1_ImageProcessing
                     {
                         double distance = Math.Sqrt((currentGroup[j].Center.X - ungroupedClusters[i].Center.X) * (currentGroup[j].Center.X - ungroupedClusters[i].Center.X) + (currentGroup[j].Center.Y - ungroupedClusters[i].Center.Y) * (currentGroup[j].Center.Y - ungroupedClusters[i].Center.Y));
                         var dangle = Math.Abs(currentGroup[j].angle - ungroupedClusters[i].angle);
-                        if (distance < threshold*2 && dangle <= thresholdAngle)
+                        if (distance < threshold * 2 && dangle <= thresholdAngle)
                         {
                             currentGroup.Add(ungroupedClusters[i]); ;
                             ungroupedClusters.RemoveAt(i);
@@ -318,13 +325,12 @@ namespace L1_ImageProcessing
                         }
                     }
                 }
-
                 groups.Add(currentGroup);
             }
 
 
             int I = 0;
-            for (int i=0; i < groups.Count; i++)
+            for (int i = 0; i < groups.Count; i++)
             {
                 if (groups[i].Count > 1)
                 {
@@ -344,7 +350,11 @@ namespace L1_ImageProcessing
                         clusters[I].wallId = i;
                         I++;
                     }
-                    lines.Add(new Line(firstPoint, lastPoint,i));
+                    lines.Add(new Line(firstPoint, lastPoint, 0));
+                }
+                else
+                {
+                    bloks.Add(new Blok(groups[i][0].Center,0));
                 }
             }
         }
@@ -409,17 +419,27 @@ namespace L1_ImageProcessing
         }
         public class Line
         {
-            public PointF firstPoint;
-            public PointF lastPoint;
-            public int lineId;
+            public PointF firstPoint { get; set; }
+            public PointF lastPoint { get; set; }
+            public int lineId { get; set; }
 
-            public Line(PointF start,
-                        PointF finish,int lineId)
+            public Line(PointF start, PointF finish, int lineId)
             {
                 this.firstPoint = start;
                 this.lastPoint = finish;
                 this.lineId = lineId;
-            }           
+            }
+        }
+
+        public class Blok
+        {
+            public PointF Point;
+            public int i;
+            public Blok(PointF point, int i)
+            {
+                Point = point;
+                this.i = i;
+            }
         }
 
 
@@ -590,7 +610,7 @@ namespace L1_ImageProcessing
                     Invoke(new AddItemDelegate(AddItem), new object[] { bytes });
                 }
             }
-            catch {}
+            catch { }
             finally
             {
                 listener.Close();
@@ -619,6 +639,11 @@ namespace L1_ImageProcessing
         private void button1_Click(object sender, EventArgs e)
         {
             timer2.Start();
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            numericUpDownSize.Value = (decimal)trackBar1.Value / 100;
         }
     }
 }
