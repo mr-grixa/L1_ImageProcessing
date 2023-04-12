@@ -35,7 +35,6 @@
             this.button_next = new System.Windows.Forms.Button();
             this.button_load = new System.Windows.Forms.Button();
             this.textBox_path = new System.Windows.Forms.TextBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.button_start = new System.Windows.Forms.Button();
@@ -56,6 +55,15 @@
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.label5 = new System.Windows.Forms.Label();
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.label6 = new System.Windows.Forms.Label();
+            this.numericUpDown_sdwid_R = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
+            this.numericUpDown_sdwid_G = new System.Windows.Forms.NumericUpDown();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownKlaster)).BeginInit();
@@ -64,6 +72,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_angl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_sdwid_R)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_sdwid_G)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBoxMain
@@ -110,14 +123,6 @@
             this.textBox_path.Size = new System.Drawing.Size(269, 20);
             this.textBox_path.TabIndex = 71;
             this.textBox_path.Text = "C:\\Users\\user\\Downloads\\HokuyoLidar_lidarlog\\HokuyoLidar_lidarlog.txt";
-            // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(0, 0);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(214, 355);
-            this.listBox1.TabIndex = 72;
             // 
             // timer1
             // 
@@ -269,7 +274,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(220, 255);
+            this.label4.Location = new System.Drawing.Point(220, 253);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(94, 13);
             this.label4.TabIndex = 88;
@@ -277,7 +282,7 @@
             // 
             // numericUpDown_angl
             // 
-            this.numericUpDown_angl.Location = new System.Drawing.Point(313, 255);
+            this.numericUpDown_angl.Location = new System.Drawing.Point(313, 253);
             this.numericUpDown_angl.Maximum = new decimal(new int[] {
             360,
             0,
@@ -295,7 +300,7 @@
             // checkBox_DrawRadius
             // 
             this.checkBox_DrawRadius.AutoSize = true;
-            this.checkBox_DrawRadius.Location = new System.Drawing.Point(221, 282);
+            this.checkBox_DrawRadius.Location = new System.Drawing.Point(95, 370);
             this.checkBox_DrawRadius.Name = "checkBox_DrawRadius";
             this.checkBox_DrawRadius.Size = new System.Drawing.Size(62, 17);
             this.checkBox_DrawRadius.TabIndex = 89;
@@ -305,7 +310,7 @@
             // checkBox_wall
             // 
             this.checkBox_wall.AutoSize = true;
-            this.checkBox_wall.Location = new System.Drawing.Point(289, 282);
+            this.checkBox_wall.Location = new System.Drawing.Point(156, 370);
             this.checkBox_wall.Name = "checkBox_wall";
             this.checkBox_wall.Size = new System.Drawing.Size(58, 17);
             this.checkBox_wall.TabIndex = 90;
@@ -326,7 +331,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(220, 312);
+            this.label5.Location = new System.Drawing.Point(220, 276);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(118, 13);
             this.label5.TabIndex = 92;
@@ -334,7 +339,7 @@
             // 
             // numericUpDown2
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(223, 335);
+            this.numericUpDown2.Location = new System.Drawing.Point(221, 292);
             this.numericUpDown2.Maximum = new decimal(new int[] {
             360,
             0,
@@ -349,11 +354,124 @@
             0,
             0});
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(220, 358);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(43, 13);
+            this.label6.TabIndex = 95;
+            this.label6.Text = "Радиус";
+            // 
+            // numericUpDown_sdwid_R
+            // 
+            this.numericUpDown_sdwid_R.DecimalPlaces = 2;
+            this.numericUpDown_sdwid_R.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDown_sdwid_R.Location = new System.Drawing.Point(280, 356);
+            this.numericUpDown_sdwid_R.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.numericUpDown_sdwid_R.Name = "numericUpDown_sdwid_R";
+            this.numericUpDown_sdwid_R.Size = new System.Drawing.Size(102, 20);
+            this.numericUpDown_sdwid_R.TabIndex = 94;
+            this.numericUpDown_sdwid_R.Value = new decimal(new int[] {
+            420,
+            0,
+            0,
+            0});
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(220, 379);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(94, 13);
+            this.label7.TabIndex = 97;
+            this.label7.Text = "Допуск градусов";
+            // 
+            // numericUpDown_sdwid_G
+            // 
+            this.numericUpDown_sdwid_G.Location = new System.Drawing.Point(313, 379);
+            this.numericUpDown_sdwid_G.Maximum = new decimal(new int[] {
+            360,
+            0,
+            0,
+            0});
+            this.numericUpDown_sdwid_G.Name = "numericUpDown_sdwid_G";
+            this.numericUpDown_sdwid_G.Size = new System.Drawing.Size(69, 20);
+            this.numericUpDown_sdwid_G.TabIndex = 96;
+            this.numericUpDown_sdwid_G.Value = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.BackColor = System.Drawing.SystemColors.Control;
+            this.groupBox1.Controls.Add(this.groupBox2);
+            this.groupBox1.Location = new System.Drawing.Point(221, 230);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(161, 97);
+            this.groupBox1.TabIndex = 99;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Поиск объектов";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.BackColor = System.Drawing.SystemColors.Control;
+            this.groupBox2.Location = new System.Drawing.Point(-1, 103);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(162, 79);
+            this.groupBox2.TabIndex = 100;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Отслеживание объектов";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.BackColor = System.Drawing.SystemColors.Control;
+            this.groupBox3.Controls.Add(this.groupBox4);
+            this.groupBox3.Location = new System.Drawing.Point(221, 333);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(161, 66);
+            this.groupBox3.TabIndex = 101;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Отслеживание объектов";
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.BackColor = System.Drawing.SystemColors.Control;
+            this.groupBox4.Location = new System.Drawing.Point(-1, 103);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(162, 79);
+            this.groupBox4.TabIndex = 100;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Отслеживание объектов";
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(12, 40);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(193, 324);
+            this.dataGridView1.TabIndex = 102;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.numericUpDown_sdwid_G);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.numericUpDown_sdwid_R);
             this.Controls.Add(this.numericUpDown2);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.checkBox_wall);
@@ -371,13 +489,14 @@
             this.Controls.Add(this.numericUpDownSize);
             this.Controls.Add(this.numericUpDownKlaster);
             this.Controls.Add(this.button_start);
-            this.Controls.Add(this.listBox1);
             this.Controls.Add(this.textBox_path);
             this.Controls.Add(this.button_load);
             this.Controls.Add(this.button_next);
             this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.pictureBoxMain);
             this.Controls.Add(this.trackBar1);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.groupBox3);
             this.Name = "Form1";
             this.Text = "Form1";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
@@ -389,6 +508,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_angl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_sdwid_R)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_sdwid_G)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -401,7 +525,6 @@
         private System.Windows.Forms.Button button_next;
         private System.Windows.Forms.Button button_load;
         private System.Windows.Forms.TextBox textBox_path;
-        private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Timer timer2;
         private System.Windows.Forms.Button button_start;
@@ -422,6 +545,15 @@
         private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown numericUpDown2;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.NumericUpDown numericUpDown_sdwid_R;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.NumericUpDown numericUpDown_sdwid_G;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.DataGridView dataGridView1;
     }
 }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -71,9 +72,6 @@ namespace L1_ImageProcessing
                 {
                     data[i - 1] = int.Parse(valuses[i]);
                 }
-                listBox1.Items.Clear();
-                listBox1.Items.AddRange(valuses);
-
                 double F = 0;
                 points = new List<PointF>();
                 foreach (int i in data)
@@ -103,6 +101,27 @@ namespace L1_ImageProcessing
                 if (checkBox_wall.Checked)
                     bitmap = DrawData(clusters, bitmap);
                 pictureBoxMain.Image = bitmap;
+
+                // Создаем новую таблицу
+                DataTable table = new DataTable();
+
+                // Добавляем колонки X и Y
+                table.Columns.Add("X", typeof(double));
+                table.Columns.Add("Y", typeof(double));
+
+               
+                // Заполняем таблицу данными из массива
+                for (int i = 0; i < points.Count(); i++)
+                {
+                    DataRow row = table.NewRow();
+                    row["X"] = points[i].X;  
+                    row["Y"] = points[i].Y;
+                    table.Rows.Add(row);
+                }
+                dataGridView1.DataSource = table;
+                dataGridView1.Columns["X"].Width = 40;
+                dataGridView1.Columns["j"].Width = 40;
+
             }
 
         }
@@ -537,8 +556,12 @@ namespace L1_ImageProcessing
 
         private void numericUpDownSize_ValueChanged(object sender, EventArgs e)
         {
-            Cluster[] clusters = KMeans(points, (int)numericUpDownKlaster.Value);
-            Draw();
+            if (points.Count > 0)
+            {
+                Cluster[] clusters = KMeans(points, (int)numericUpDownKlaster.Value);
+                Draw();
+            }
+
         }
 
 
